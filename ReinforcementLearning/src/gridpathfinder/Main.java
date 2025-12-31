@@ -1,5 +1,7 @@
 package gridpathfinder;
 
+import java.io.IOException;
+
 /**
  * @author : Asnit Bakhati
  */
@@ -9,7 +11,15 @@ public class Main {
         GridWorld env = new GridWorld();
         QLearningAgent agent = new QLearningAgent();
 
-        int episodes = 10000;
+        int episodes = 11000;
+
+        if(agent.qTableExists()){
+            try {
+                agent.loadQTable();
+            }catch (IOException ex){
+                System.out.println("Cannot read the file");
+            }
+        }else System.out.println("file doesn't exist");
 
         for (int ep = 0; ep < episodes; ep++) {
             env.reset();
@@ -26,6 +36,12 @@ public class Main {
 
         System.out.println("Training complete.");
 
+
+        try{
+            agent.persistQTable();
+        }catch (IOException ex){
+            System.out.println("Cannot persist Q-Table");
+        }
         System.out.println("\n--- DEMO START ---\n");
 
         env.reset();
@@ -39,7 +55,7 @@ public class Main {
             env.step(action);
 
             try {
-                Thread.sleep(500); // slow motion demo
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

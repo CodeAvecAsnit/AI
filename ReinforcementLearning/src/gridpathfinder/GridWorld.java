@@ -1,5 +1,6 @@
 package gridpathfinder;
 
+import java.io.File;
 import java.util.Random;
 
 class GridWorld {
