@@ -60,9 +60,7 @@ public class Main {
                 e.printStackTrace();
             }
         }
-
         env.printGrid();
         System.out.println("Reached Goal!");
-
     }
 }
