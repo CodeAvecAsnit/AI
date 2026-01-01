@@ -14,15 +14,15 @@ public class Dfa {
     private DfaNode acceptingState;
     private DfaNode deadState;
 
-    public Dfa(){
-        this.q1= new DfaNode("q1");
-        this.q2= new DfaNode("q2");
-        this.q3= new DfaNode("q3");
-        this.q4= new DfaNode("q4");
-        this.q5= new DfaNode("q5");
-        this.q6= new DfaNode("q6");
-        this.q7= new DfaNode("q7");
-        this.q8= new DfaNode("q8");
+    public Dfa() {
+        this.q1 = new DfaNode("q1");
+        this.q2 = new DfaNode("q2");
+        this.q3 = new DfaNode("q3");
+        this.q4 = new DfaNode("q4");
+        this.q5 = new DfaNode("q5");
+        this.q6 = new DfaNode("q6");
+        this.q7 = new DfaNode("q7");
+        this.q8 = new DfaNode("q8");
 
         this.initialState = q1;
         this.acceptingState = q7;
@@ -53,34 +53,21 @@ public class Dfa {
         q8.setBNext(q8);
     }
 
-    public boolean isGoal(DfaNode node){
+    public boolean isGoal(DfaNode node) {
         return node.equals(acceptingState);
     }
 
 
-    public boolean isDead(DfaNode node){
+    public boolean isDead(DfaNode node) {
         return node.equals(deadState);
     }
 
-    public void reset(){
+    public void reset() {
         this.initialState = q1;
     }
 
-    public DfaNode setPointer(){
+    public DfaNode setPointer() {
         DfaNode node = initialState;
         return node;
-    }
-
-
-
-    public static void main(String[] args) {
-        String str = "bbaabaaa";
-        Dfa dfa = new Dfa();
-        DfaNode curr = dfa.setPointer();
-        for(char s : str.toCharArray()){
-            curr = curr.transform(s);
-        }
-        System.out.println(dfa.isGoal(curr));
-
     }
 }
