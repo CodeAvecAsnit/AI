@@ -33,31 +33,35 @@ public class QLearningAgent {
             dfa.reset();
             DfaNode state = dfa.setPointer();
             int steps = 0;
-            while (!dfa.isGoal(state) && !dfa.isDead(state)) {
+            while (!dfa.isDead(state)&&steps<50) {
+
                 char action = chooseAction(state);
                 DfaNode nextState = state.transform(action);
                 double reward = getReward(nextState);
 
-                double oldQ = qTable[state.getIndex()-1][getTransition(action)];
+                double oldQ = qTable[state.getIndex() - 1][getTransition(action)];
                 double maxNextQ = getMaxQ(nextState);
 
                 double updatedQ =
                         oldQ + alpha * (reward + gamma * maxNextQ - oldQ);
 
-                qTable[state.getIndex()-1][getTransition(action)]= updatedQ;
+                qTable[state.getIndex() - 1][getTransition(action)] = updatedQ;
 
                 state = nextState;
                 steps++;
             }
+
         }
     }
 
     public void seeQTable(){
         filePersister.displayQTable(this.qTable);
     }
+
     private int getTransition(char a){
         return (a=='a')?0:1;
     }
+
     private char chooseAction(DfaNode state) {
         if (random.nextDouble() < epsilon) {
             return random.nextBoolean() ? 'a' : 'b';
@@ -67,7 +71,7 @@ public class QLearningAgent {
 
     private char getBestAction(DfaNode state) {
         int index = state.getIndex();
-        return qTable[index-1][0] >= qTable[index-1][1] ? 'a' : 'b';
+        return qTable[index-1][0] > qTable[index-1][1] ? 'a' : 'b';
     }
 
     private double getMaxQ(DfaNode state) {
@@ -79,6 +83,18 @@ public class QLearningAgent {
         if (dfa.isGoal(state)) return 100.0;
         if (dfa.isDead(state)) return -100.0;
         return 1.0;
+    }
+
+    public String generateStringOfLength(int length){
+       dfa.reset();
+       DfaNode startNode = dfa.setPointer();
+       StringBuilder sb = new StringBuilder();
+       for(int i = 0 ; i <length;++i){
+           char act = getBestAction(startNode);
+           sb.append(act);
+           startNode = startNode.transform(act);
+       }
+       return sb.toString();
     }
 
     public String generateString() {
@@ -97,9 +113,10 @@ public class QLearningAgent {
 
     public static void main(String[] args) {
         Dfa dfa = new Dfa();
-        QLearningAgent agent = new QLearningAgent(dfa,0.1,0.9,0.2,8);
-        agent.train(10);
+        QLearningAgent agent = new QLearningAgent(dfa,0.1,0.9,0.2,7);
+        agent.train(1000000);
         agent.seeQTable();
+        System.out.println(agent.generateStringOfLength(100));
         System.out.println(agent.generateString());
     }
 }

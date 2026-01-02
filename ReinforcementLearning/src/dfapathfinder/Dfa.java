@@ -9,6 +9,12 @@ public class Dfa {
     private DfaNode q6;
     private DfaNode q7;
 
+    public static int MIN_ACCEPT_LENGTH;
+
+    static{
+        MIN_ACCEPT_LENGTH=5;
+    }
+
     private DfaNode initialState;
     private DfaNode acceptingState;
     private DfaNode deadState;
