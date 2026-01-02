@@ -1,5 +1,7 @@
 package gridpathfinder;
 
+import FileHandling.FilePersister;
+
 import java.io.IOException;
 
 /**
@@ -8,14 +10,15 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
 
+        FilePersister filePersister = new FilePersister();
         GridWorld env = new GridWorld();
-        QLearningAgent agent = new QLearningAgent();
+        QLearningAgent agent = new QLearningAgent(filePersister);
 
         int episodes = 11000;
 
         if(agent.qTableExists()){
             try {
-                agent.loadQTable();
+                agent.loadQTableInAgent();
             }catch (IOException ex){
                 System.out.println("Cannot read the file");
             }

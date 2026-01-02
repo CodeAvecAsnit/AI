@@ -1,5 +1,7 @@
 package gridpathfinder;
 
+import FileHandling.FilePersister;
+
 import java.io.*;
 import java.util.Random;
 
@@ -14,8 +16,13 @@ class QLearningAgent {
     double alpha = 0.1;
     double gamma = 0.9;
     double epsilon = 0.2;
+    private FilePersister filePersister;
 
     Random random = new Random();
+
+    public QLearningAgent(FilePersister filePersister){
+        this.filePersister = new FilePersister();
+    }
 
     public int chooseAction(int state) {
         if (random.nextDouble() < epsilon) {
@@ -49,35 +56,12 @@ class QLearningAgent {
         return file.exists();
     }
 
-    public void loadQTable() throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        DataInputStream dis = new DataInputStream(fis);
-        for(int i = 0; i < Q.length;++i){
-            for(int j = 0; j < Q[0].length;++j){
-                Q[i][j]=dis.readDouble();
-            }
-        }
+    public void loadQTableInAgent() throws IOException {
+        filePersister.loadQTable(file,Q);
     }
 
     public void persistQTable() throws IOException {
-        FileOutputStream fis = new FileOutputStream(file);
-        DataOutputStream dis = new DataOutputStream(fis);
-        for (int i = 0; i < Q.length; ++i) {
-            for (int j = 0; j < Q[0].length; ++j) {
-                dis.writeDouble(Q[i][j]);
-            }
-        }
-        System.out.println("File saved");
+        filePersister.persistQTable(file,Q);
     }
 
-    public void displayQTable(){
-        System.out.println("Q - Table");
-        System.out.println();
-        for(int i = 0; i < Q.length;++i){
-            for(int j = 0; j < Q[0].length;++j){
-                System.out.print(Q[i][j]+", ");
-            }
-            System.out.println();
-        }
-    }
 }

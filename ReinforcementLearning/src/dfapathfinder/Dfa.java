@@ -1,4 +1,4 @@
-package DFAPathfinder;
+package dfapathfinder;
 
 public class Dfa {
     private DfaNode q1;
@@ -8,30 +8,28 @@ public class Dfa {
     private DfaNode q5;
     private DfaNode q6;
     private DfaNode q7;
-    private DfaNode q8;
 
     private DfaNode initialState;
     private DfaNode acceptingState;
     private DfaNode deadState;
 
     public Dfa() {
-        this.q1 = new DfaNode("q1");
-        this.q2 = new DfaNode("q2");
-        this.q3 = new DfaNode("q3");
-        this.q4 = new DfaNode("q4");
-        this.q5 = new DfaNode("q5");
-        this.q6 = new DfaNode("q6");
-        this.q7 = new DfaNode("q7");
-        this.q8 = new DfaNode("q8");
+        this.q1 = new DfaNode(1);
+        this.q2 = new DfaNode(2);
+        this.q3 = new DfaNode(3);
+        this.q4 = new DfaNode(4);
+        this.q5 = new DfaNode(5);
+        this.q6 = new DfaNode(6);
+        this.q7 = new DfaNode(7);
 
         this.initialState = q1;
-        this.acceptingState = q7;
-        this.deadState = q8;
+        this.acceptingState = q6;
+        this.deadState = q7;
 
-        q1.setANext(q8);
+        q1.setANext(q7);
         q1.setBNext(q2);
 
-        q2.setANext(q8);
+        q2.setANext(q7);
         q2.setBNext(q3);
 
         q3.setANext(q4);
@@ -43,14 +41,11 @@ public class Dfa {
         q5.setANext(q6);
         q5.setBNext(q4);
 
-        q6.setANext(q7);
+        q6.setANext(q6);
         q6.setBNext(q4);
 
         q7.setANext(q7);
-        q7.setBNext(q4);
-
-        q8.setANext(q8);
-        q8.setBNext(q8);
+        q7.setBNext(q7);
     }
 
     public boolean isGoal(DfaNode node) {
@@ -69,5 +64,15 @@ public class Dfa {
     public DfaNode setPointer() {
         DfaNode node = initialState;
         return node;
+    }
+    public boolean isValidString(String s) {
+        DfaNode current = q1;
+        for (char c : s.toCharArray()) {
+            current = current.transform(c);
+            if (isDead(current)) {
+                return false;
+            }
+        }
+        return isGoal(current);
     }
 }
