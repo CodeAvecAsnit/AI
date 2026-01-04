@@ -3,7 +3,18 @@ package FileHandling;
 import java.io.*;
 
 public class FilePersister {
-    public void loadQTable(File file, double[][] Q) throws IOException {
+
+    private File file;
+
+    public FilePersister(File file) {
+        this.file=file;
+    }
+
+    public boolean fileExists(){
+        return file.exists();
+    }
+
+    public void loadQTable( double[][] Q) throws IOException {
         FileInputStream fis = new FileInputStream(file);
         DataInputStream dis = new DataInputStream(fis);
         for(int i = 0; i < Q.length;++i){
@@ -13,7 +24,7 @@ public class FilePersister {
         }
     }
 
-    public void persistQTable(File file,double[][] Q) throws IOException {
+    public void persistQTable(double[][] Q) throws IOException {
         FileOutputStream fis = new FileOutputStream(file);
         DataOutputStream dis = new DataOutputStream(fis);
         for (int i = 0; i < Q.length; ++i) {

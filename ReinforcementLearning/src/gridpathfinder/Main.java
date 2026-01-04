@@ -1,18 +1,15 @@
 package gridpathfinder;
 
-import FileHandling.FilePersister;
-
 import java.io.IOException;
 
 /**
  * @author : Asnit Bakhati
  */
 public class Main {
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
-        FilePersister filePersister = new FilePersister();
         GridWorld env = new GridWorld();
-        QLearningAgent agent = new QLearningAgent(filePersister);
+        MatrixLearningAgent agent = new MatrixLearningAgent();
 
         int episodes = 11000;
 

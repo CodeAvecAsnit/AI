@@ -1,31 +1,23 @@
 package dfapathfinder;
 
+import Component.QLearningAgent;
 import FileHandling.FilePersister;
+import java.io.File;
 
-import java.util.Random;
+public class DFAQLearningAgent extends QLearningAgent {
 
-public class QLearningAgent {
-
-    private double[][] qTable;
-    private final double alpha;
-    private final double gamma;
-    private final double epsilon;
     private final Dfa dfa;
-    private final Random random;
-    FilePersister filePersister;
+    private FilePersister filePersister;
 
     public static final int TRANSITION = 2;
+    private final static String FILE_NAME = "DfaLeaner.bin";
 
 
-    public QLearningAgent(Dfa dfa, double alpha, double gamma, double epsilon,int totalStates) {
+    public DFAQLearningAgent(Dfa dfa, double alpha, double gamma, double epsilon, int totalStates) {
+        super(alpha,gamma,epsilon,totalStates,TRANSITION);
         this.dfa = dfa;
-        this.alpha = alpha;
-        this.gamma = gamma;
-        this.epsilon = epsilon;
         this.qTable = new double[totalStates][TRANSITION];
-        this.random = new Random();
-        this.filePersister = new FilePersister();
-        filePersister.displayQTable(this.qTable);
+        this.filePersister = new FilePersister(new File(FILE_NAME));
     }
 
     public void train(int episodes) {
@@ -111,9 +103,9 @@ public class QLearningAgent {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Dfa dfa = new Dfa();
-        QLearningAgent agent = new QLearningAgent(dfa,0.1,0.9,0.2,7);
+        DFAQLearningAgent agent = new DFAQLearningAgent(dfa,0.1,0.9,0.2,7);
         agent.train(1000000);
         agent.seeQTable();
         System.out.println(agent.generateStringOfLength(100));

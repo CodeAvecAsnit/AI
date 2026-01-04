@@ -1,27 +1,27 @@
 package gridpathfinder;
 
+import Component.QLearningAgent;
 import FileHandling.FilePersister;
 
 import java.io.*;
 import java.util.Random;
 
-class QLearningAgent {
+class MatrixLearningAgent extends QLearningAgent {
 
+    private final static String FILE_NAME;
     static final int STATES = GridWorld.ROWS * GridWorld.COLS;
     static final int ACTIONS = 4;
-
-    File file = new File("q_table.bin");
-    double[][] Q = new double[STATES][ACTIONS];
-
-    double alpha = 0.1;
-    double gamma = 0.9;
-    double epsilon = 0.2;
     private FilePersister filePersister;
 
     Random random = new Random();
 
-    public QLearningAgent(FilePersister filePersister){
-        this.filePersister = new FilePersister();
+    static{
+        FILE_NAME = "gridPathFinder.bin";
+    }
+
+    public MatrixLearningAgent(){
+        super(0.1,0.9,0.2,STATES,ACTIONS);
+        this.filePersister = new FilePersister(new File(FILE_NAME));
     }
 
     public int chooseAction(int state) {
@@ -32,12 +32,12 @@ class QLearningAgent {
     }
 
     public int getBestAction(int state) {
-        double max = Q[state][0];
+        double max = qTable[state][0];
         int best = 0;
 
         for (int i = 1; i < ACTIONS; i++) {
-            if (Q[state][i] > max) {
-                max = Q[state][i];
+            if (qTable[state][i] > max) {
+                max = qTable[state][i];
                 best = i;
             }
         }
@@ -45,23 +45,23 @@ class QLearningAgent {
     }
 
     public void update(int state, int action, int reward, int nextState) {
-        double maxNext = Q[nextState][0];
+        double maxNext = qTable[nextState][0];
         for (int i = 1; i < ACTIONS; i++) {
-            maxNext = Math.max(maxNext, Q[nextState][i]);
+            maxNext = Math.max(maxNext, qTable[nextState][i]);
         }
-        Q[state][action] += alpha *
-                (reward + gamma * maxNext - Q[state][action]);
+        qTable[state][action] += alpha *
+                (reward + gamma * maxNext - qTable[state][action]);
     }
     public boolean qTableExists(){
-        return file.exists();
+        return filePersister.fileExists();
     }
 
     public void loadQTableInAgent() throws IOException {
-        filePersister.loadQTable(file,Q);
+        filePersister.loadQTable(qTable);
     }
 
     public void persistQTable() throws IOException {
-        filePersister.persistQTable(file,Q);
+        filePersister.persistQTable(qTable);
     }
 
 }

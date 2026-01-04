@@ -1,6 +1,8 @@
 package dfapathfinder;
 
-public class Dfa {
+import Component.Environment;
+
+public class Dfa implements Environment {
     private DfaNode q1;
     private DfaNode q2;
     private DfaNode q3;

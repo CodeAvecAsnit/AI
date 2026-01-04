@@ -40,7 +40,7 @@ public class SnakeWorld {
     }
 
     private boolean isDead(){
-        return (SnakeX<0||SnakeX>=GridX)||(SnakeY<0||SnakeY>=GridY||snakeLength>550);
+        return (SnakeX<0||SnakeX>=GridX)||(SnakeY<0||SnakeY>=GridY||snakeLength>5500);
     }
 
     public void start(){

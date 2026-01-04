@@ -1,35 +1,35 @@
 package dfapathfinder;
 
+import Component.QLearningAgent;
 import FileHandling.FilePersister;
-import java.util.Random;
 
-public class LengthFinderAgent {
+import java.io.File;
 
-    double[][] qTable;
-    private final double alpha;
-    private final double gamma;
-    private final double epsilon;
-    private final Dfa dfa;
-    private final Random random;
-    FilePersister filePersister;
+
+public class LengthFinderAgent extends QLearningAgent {
+
+    private Dfa dfa;
     private final int maxLength;
+    private final FilePersister filePersister;
+    public static final int TRANSITIONS = 2;
 
-    public static final int TRANSITION = 2;
+    private static final String FILE_NAME ;
+
+    static{
+        FILE_NAME = "DfaLength.bin";
+    }
 
     public LengthFinderAgent(Dfa dfa, double alpha, double gamma, double epsilon, int totalStates, int maxLength) {
-        this.dfa = dfa;
-        this.alpha = alpha;
-        this.gamma = gamma;
-        this.epsilon = epsilon;
-        this.maxLength = maxLength;
         // State encoding: state_index * maxLength + current_length
-        this.qTable = new double[totalStates * (maxLength + 1)][TRANSITION];
-        this.random = new Random();
-        this.filePersister = new FilePersister();
+        int len = totalStates*(maxLength+1);
+        super(alpha,gamma,epsilon,len,TRANSITIONS);
+        this.dfa = dfa;
+        this.maxLength = maxLength;
+        this.filePersister = new FilePersister(new File(FILE_NAME));
     }
 
     public void seeQTable() {
-        filePersister.displayQTable(this.qTable);
+        filePersister.displayQTable(qTable);
     }
 
     private int getTransition(char a) {
@@ -132,13 +132,13 @@ public class LengthFinderAgent {
         LengthFinderAgent agent = new LengthFinderAgent(dfa, 0.1, 0.9, 0.2, 7, 25);
         System.out.println("Training agent...");
         for (int i = 5; i <= 25; ++i) {
-            System.out.println("Training for length " + i);
+            System.out.println(STR."Training for length \{i}");
             agent.train(100000, i);
         }
         System.out.println("\nGenerating strings:");
         for (int i = 5; i <= 25; ++i) {
             String result = agent.generateString(i);
-            System.out.println("Length " + i + " String: " + result);
+            System.out.println(STR."Length \{i} String: \{result}");
         }
     }
 }

@@ -3,6 +3,7 @@ package snakegame;
 import java.util.Random;
 
 public class QLearningAgent {
+    private final static String fileName;
     private double[][] QTable;
     private double alpha;      // Learning rate
     private double gamma;      // Discount factor
@@ -12,6 +13,11 @@ public class QLearningAgent {
 
     private final int STATE_SIZE = 144;
     private final int ACTION_SIZE = 4;
+
+    static{
+        fileName="snake.bin";
+    }
+
 
     public QLearningAgent(SnakeWorld snakeWorld, double alpha, double gamma, double epsilon) {
         this.snakeWorld = snakeWorld;
@@ -137,6 +143,7 @@ public class QLearningAgent {
         for (int episode = 1; episode <= episodes; episode++) {
             System.out.print("Episode " + episode + " - ");
             trainEpisode();
+
             if (episode % 100 == 0) {
                 epsilon = Math.max(0.01, epsilon * 0.95);
                 System.out.println("Epsilon decayed to: " + epsilon);
@@ -187,11 +194,8 @@ public class QLearningAgent {
         // gamma = 0.9 (discount factor)
         // epsilon = 0.3 (exploration rate)
         QLearningAgent agent = new QLearningAgent(world, 0.1, 0.9, 0.9);
-
-        agent.train(500000);
-
+        agent.train(50000);
         agent.test();
-
         agent.printQTable();
     }
 }
